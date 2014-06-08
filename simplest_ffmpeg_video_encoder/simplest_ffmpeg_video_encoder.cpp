@@ -25,6 +25,37 @@ extern "C"
 #include "libswscale\swscale.h"
 };
 
+
+int flush_encoder(AVFormatContext *fmt_ctx,unsigned int stream_index)
+{
+	int ret;
+	int got_frame;
+	AVPacket enc_pkt;
+	if (!(fmt_ctx->streams[stream_index]->codec->codec->capabilities &
+		CODEC_CAP_DELAY))
+		return 0;
+	while (1) {
+		printf("Flushing stream #%u encoder\n", stream_index);
+		//ret = encode_write_frame(NULL, stream_index, &got_frame);
+		enc_pkt.data = NULL;
+		enc_pkt.size = 0;
+		av_init_packet(&enc_pkt);
+		ret = avcodec_encode_video2 (fmt_ctx->streams[stream_index]->codec, &enc_pkt,
+			NULL, &got_frame);
+		av_frame_free(NULL);
+		if (ret < 0)
+			break;
+		if (!got_frame)
+		{ret=0;break;}
+		printf("编码成功1帧！\n");
+		/* mux encoded frame */
+		ret = av_write_frame(fmt_ctx, &enc_pkt);
+		if (ret < 0)
+			break;
+	}
+	return ret;
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	AVFormatContext* pFormatCtx;
@@ -132,13 +163,19 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 		if (got_picture==1)
 		{
-			printf("编码成功第%d帧！\n",i);
+			printf("编码成功1帧！\n");
 			pkt.stream_index = video_st->index;
 			ret = av_write_frame(pFormatCtx, &pkt);
 			av_free_packet(&pkt);
 		}
 	}
-	
+	//Flush Encoder
+	int ret = flush_encoder(pFormatCtx,0);
+	if (ret < 0) {
+		printf("Flushing encoder failed\n");
+		return -1;
+	}
+
 	//写文件尾
 	av_write_trailer(pFormatCtx);
 
