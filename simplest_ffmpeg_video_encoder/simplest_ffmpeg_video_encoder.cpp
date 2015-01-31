@@ -69,10 +69,10 @@ int main(int argc, char* argv[])
 	int y_size;
 	int framecnt=0;
 	//FILE *in_file = fopen("src01_480x272.yuv", "rb");	//Input raw YUV data 
-	FILE *in_file = fopen("../ds_480x272.yuv", "rb");		//Input raw YUV data
-	int in_w=480,in_h=272;								//Input data's width and height
-	int framenum=100;									//Frames to encode
-	//const char* out_file = "src01.h264";				//Output Filepath 
+	FILE *in_file = fopen("../ds_480x272.yuv", "rb");   //Input raw YUV data
+	int in_w=480,in_h=272;                              //Input data's width and height
+	int framenum=100;                                   //Frames to encode
+	//const char* out_file = "src01.h264";              //Output Filepath 
 	//const char* out_file = "src01.ts";
 	//const char* out_file = "src01.hevc";
 	const char* out_file = "ds.h264";
@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 
 	//Open output URL
 	if (avio_open(&pFormatCtx->pb,out_file, AVIO_FLAG_READ_WRITE) < 0){
-		printf("Failed to open output file! (输出文件打开失败！)\n");
+		printf("Failed to open output file! \n");
 		return -1;
 	}
 
@@ -143,11 +143,11 @@ int main(int argc, char* argv[])
 
 	pCodec = avcodec_find_encoder(pCodecCtx->codec_id);
 	if (!pCodec){
-		printf("Can not find encoder! (没有找到合适的编码器！)\n");
+		printf("Can not find encoder! \n");
 		return -1;
 	}
 	if (avcodec_open2(pCodecCtx, pCodec,&param) < 0){
-		printf("Failed to open encoder! (编码器打开失败！)\n");
+		printf("Failed to open encoder! \n");
 		return -1;
 	}
 
@@ -167,7 +167,7 @@ int main(int argc, char* argv[])
 	for (int i=0; i<framenum; i++){
 		//Read raw YUV data
 		if (fread(picture_buf, 1, y_size*3/2, in_file) < 0){
-			printf("Failed to read raw data! (文件读取错误！)\n");
+			printf("Failed to read raw data! \n");
 			return -1;
 		}else if(feof(in_file)){
 			break;
