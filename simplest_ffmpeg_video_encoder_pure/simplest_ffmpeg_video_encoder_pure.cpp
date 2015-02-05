@@ -22,12 +22,29 @@
 
 #include <stdio.h>
 
+#define __STDC_CONSTANT_MACROS
+
+#ifdef _WIN32
+//Windows
 extern "C"
 {
 #include "libavutil\opt.h"
 #include "libavcodec\avcodec.h"
 #include "libavutil\imgutils.h"
 };
+#else
+//Linux...
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include <libavutil\opt.h>
+#include <libavcodec\avcodec.h>
+#include <libavutil\imgutils.h>
+#ifdef __cplusplus
+};
+#endif
+#endif
 
 //test different codec
 #define TEST_H264  0

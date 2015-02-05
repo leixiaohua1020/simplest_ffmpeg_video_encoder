@@ -9,4 +9,5 @@
 #http://blog.csdn.net/leixiaohua1020
 #
 #compile
-gcc simplest_ffmpeg_video_encoder.cpp -g -o simplest_ffmpeg_video_encoder.out -lavformat -lavcodec -lavutil
+gcc simplest_ffmpeg_video_encoder.cpp -g -o simplest_ffmpeg_video_encoder.out \
+-I /usr/local/include -L /usr/local/lib -lavformat -lavcodec -lavutil
