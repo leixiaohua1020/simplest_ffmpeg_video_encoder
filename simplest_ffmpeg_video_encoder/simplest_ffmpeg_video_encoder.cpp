@@ -24,9 +24,9 @@
 //Windows
 extern "C"
 {
-#include "libavutil\opt.h"
-#include "libavcodec\avcodec.h"
-#include "libavformat\avformat.h"
+#include "libavutil/opt.h"
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
 };
 #else
 //Linux...
@@ -34,9 +34,9 @@ extern "C"
 extern "C"
 {
 #endif
-#include <libavutil\opt.h>
-#include <libavcodec\avcodec.h>
-#include <libavformat\avformat.h>
+#include <libavutil/opt.h>
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
 #ifdef __cplusplus
 };
 #endif
@@ -169,7 +169,7 @@ int main(int argc, char* argv[])
 	}
 
 
-	pFrame = avcodec_alloc_frame();
+	pFrame = av_frame_alloc();
 	picture_size = avpicture_get_size(pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
 	picture_buf = (uint8_t *)av_malloc(picture_size);
 	avpicture_fill((AVPicture *)pFrame, picture_buf, pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
@@ -183,7 +183,7 @@ int main(int argc, char* argv[])
 
 	for (int i=0; i<framenum; i++){
 		//Read raw YUV data
-		if (fread(picture_buf, 1, y_size*3/2, in_file) < 0){
+		if (fread(picture_buf, 1, y_size*3/2, in_file) <= 0){
 			printf("Failed to read raw data! \n");
 			return -1;
 		}else if(feof(in_file)){

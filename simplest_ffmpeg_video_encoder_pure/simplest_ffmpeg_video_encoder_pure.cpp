@@ -28,9 +28,9 @@
 //Windows
 extern "C"
 {
-#include "libavutil\opt.h"
-#include "libavcodec\avcodec.h"
-#include "libavutil\imgutils.h"
+#include "libavutil/opt.h"
+#include "libavcodec/avcodec.h"
+#include "libavutil/imgutils.h"
 };
 #else
 //Linux...
@@ -38,17 +38,17 @@ extern "C"
 extern "C"
 {
 #endif
-#include <libavutil\opt.h>
-#include <libavcodec\avcodec.h>
-#include <libavutil\imgutils.h>
+#include <libavutil/opt.h>
+#include <libavcodec/avcodec.h>
+#include <libavutil/imgutils.h>
 #ifdef __cplusplus
 };
 #endif
 #endif
 
 //test different codec
-#define TEST_H264  0
-#define TEST_HEVC  1
+#define TEST_H264  1
+#define TEST_HEVC  0
 
 
 int main(int argc, char* argv[])
@@ -141,9 +141,9 @@ int main(int argc, char* argv[])
         pkt.data = NULL;    // packet data will be allocated by the encoder
         pkt.size = 0;
 		//Read raw YUV data
-		if (fread(pFrame->data[0],1,y_size,fp_in)< 0||		// Y
-			fread(pFrame->data[1],1,y_size/4,fp_in)< 0||	// U 
-			fread(pFrame->data[2],1,y_size/4,fp_in)< 0){	// V
+		if (fread(pFrame->data[0],1,y_size,fp_in)<= 0||		// Y
+			fread(pFrame->data[1],1,y_size/4,fp_in)<= 0||	// U
+			fread(pFrame->data[2],1,y_size/4,fp_in)<= 0){	// V
 			return -1;
 		}else if(feof(fp_in)){
 			break;
