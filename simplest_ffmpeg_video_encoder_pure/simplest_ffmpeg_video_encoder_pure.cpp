@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 {
 	AVCodec *pCodec;
     AVCodecContext *pCodecCtx= NULL;
-    int i, ret, x, y, got_output;
+    int i, ret, got_output;
     FILE *fp_in;
 	FILE *fp_out;
     AVFrame *pFrame;
