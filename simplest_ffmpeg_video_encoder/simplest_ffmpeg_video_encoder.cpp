@@ -113,8 +113,8 @@ int main(int argc, char* argv[])
 	}
 
 	video_st = avformat_new_stream(pFormatCtx, 0);
-	video_st->time_base.num = 1; 
-	video_st->time_base.den = 25;  
+	//video_st->time_base.num = 1; 
+	//video_st->time_base.den = 25;  
 
 	if (video_st==NULL){
 		return -1;
@@ -124,13 +124,15 @@ int main(int argc, char* argv[])
 	//pCodecCtx->codec_id =AV_CODEC_ID_HEVC;
 	pCodecCtx->codec_id = fmt->video_codec;
 	pCodecCtx->codec_type = AVMEDIA_TYPE_VIDEO;
-	pCodecCtx->pix_fmt = PIX_FMT_YUV420P;
+	pCodecCtx->pix_fmt = AV_PIX_FMT_YUV420P;
 	pCodecCtx->width = in_w;  
 	pCodecCtx->height = in_h;
-	pCodecCtx->time_base.num = 1;  
-	pCodecCtx->time_base.den = 25;  
 	pCodecCtx->bit_rate = 400000;  
 	pCodecCtx->gop_size=250;
+
+	pCodecCtx->time_base.num = 1;  
+	pCodecCtx->time_base.den = 25;  
+
 	//H264
 	//pCodecCtx->me_range = 16;
 	//pCodecCtx->max_qdiff = 4;
@@ -193,7 +195,8 @@ int main(int argc, char* argv[])
 		pFrame->data[1] = picture_buf+ y_size;      // U 
 		pFrame->data[2] = picture_buf+ y_size*5/4;  // V
 		//PTS
-		pFrame->pts=i;
+		//pFrame->pts=i;
+		pFrame->pts=i*(video_st->time_base.den)/((video_st->time_base.num)*25);
 		int got_picture=0;
 		//Encode
 		int ret = avcodec_encode_video2(pCodecCtx, &pkt,pFrame, &got_picture);
